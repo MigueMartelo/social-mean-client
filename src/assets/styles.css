@@ -8,6 +8,10 @@
 	padding-bottom: 15px;
 }
 
+.active {
+	background: #cc1717;
+}
+
 /*Headers*/
 .navigation{
 	padding: 0px !important;

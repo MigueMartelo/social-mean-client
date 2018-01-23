@@ -12,6 +12,9 @@ import { UserService } from '../../services/user.service';
 export class LoginComponent implements OnInit{
   public title:string;
   public user:User;
+  public status: string;
+  public identity;
+  public token;
 
   constructor(
     private _route: ActivatedRoute,
@@ -27,6 +30,64 @@ export class LoginComponent implements OnInit{
   }
 
   onSubmit(){
-    console.log(this.user.email + ' ' +this.user.password);
+      //Loguear al usuario y conseguir sus datos
+      this._userService.signup(this.user).subscribe(
+      res => {
+        this.identity = res.user;
+        console.log(this.identity);
+
+        if(!this.identity || !this.identity._id){
+            this.status = 'error';
+        }else{
+            this.status = 'success';
+
+            // PERSISITIR DATOS DEL USUARIO
+            localStorage.setItem('identity', JSON.stringify(this.identity));
+
+            // Conseguir el token
+            this.getToken();
+        }
+
+        this.status = 'success';
+      },
+      err => {
+        let erroMessage = <any>err;
+        console.log(erroMessage);
+
+        if(erroMessage != null){
+          this.status = 'error';
+        }
+      }
+    );
+  }
+
+  getToken(){
+      this._userService.signup(this.user, 'true').subscribe(
+      res => {
+        this.token = res.token;
+        console.log(this.token);
+
+        if(this.token.length <= 0){
+            this.status = 'error';
+        }else{
+            this.status = 'success';
+
+            // PERSISITIR TOKEN DEL USUARIO
+            localStorage.setItem('token', JSON.stringify(this.token));
+
+            // Conseguir los contadores o estadísticas del usuario
+        }
+
+        this.status = 'success';
+      },
+      err => {
+        let erroMessage = <any>err;
+        console.log(erroMessage);
+
+        if(erroMessage != null){
+          this.status = 'error';
+        }
+      }
+    );
   }
 }

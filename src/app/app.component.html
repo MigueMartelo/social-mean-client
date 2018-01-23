@@ -6,7 +6,7 @@
         <a class="navbar-brand" href="#">{{title}}</a>
       </div>
 
-      <div class="nav navbar-nav">
+      <ul class="nav navbar-nav" *ngIf="identity">
         <li>
           <a href="">
             <span class="glyphicon glyphicon-home"></span> Inicio
@@ -22,7 +22,21 @@
             <span class="glyphicon glyphicon-user"></span> Gente
           </a>
         </li>
-      </div>
+      </ul>
+
+      <ul class="nav navbar navbar-nav navbar-right" *ngIf="!identity">
+        <li>
+          <a [routerLink]="['/login']" [routerLinkActive]="['active']">
+            <span class="glyphicon glyphicon-log-in"></span> Login
+          </a>
+        </li>
+        <li>
+          <a [routerLink]="['/registro']" [routerLinkActive]="['active']">
+            <span class="glyphicon glyphicon-user"></span> Registro
+          </a>
+        </li>
+      </ul>
+
     </div>
   </div>
 </div>
