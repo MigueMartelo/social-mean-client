@@ -1,7 +1,15 @@
 <div class="col-lg-5">
   <h1 class="h1-strong">{{title}}</h1>
 
-  <form #registerForm="ngForm" (ngSubmit)="onSubmit()" class="col-lg-12">
+  <div class="alert alert-success" *ngIf="status=='success'">
+    <p>Registro completado correctamente, <a [routerLink]="['/login']">Ingresa aquí</a></p>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="status == 'error'">
+    <p>No se ha realizado el registro, quizas tu email o nick ya esten en uso, intentalo nuevamente!</p>
+  </div>
+
+  <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)" class="col-lg-12 form-group">
     <p>
       <label for="name">Nombre</label>
       <input type="text" name="name" #name="ngModel" [(ngModel)]="user.name" class="form-control" required>
