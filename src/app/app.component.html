@@ -8,17 +8,17 @@
 
       <ul class="nav navbar-nav" *ngIf="identity">
         <li>
-          <a href="">
+          <a [routerLink]="['/home']" [routerLinkActive]="['active']">
             <span class="glyphicon glyphicon-home"></span> Inicio
           </a>
         </li>
         <li>
-          <a href="">
+          <a href="" [routerLinkActive]="['active']">
             <span class="glyphicon glyphicon-th-list"></span> Timeline
           </a>
         </li>
         <li>
-          <a href="">
+          <a href="" [routerLinkActive]="['active']">
             <span class="glyphicon glyphicon-user"></span> Gente
           </a>
         </li>

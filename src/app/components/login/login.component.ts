@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit{
     private _userService: UserService
   ){
     this.title = 'Identificate';
-    this.user = new User("", "", "", "", "", "", "ROLE_USER", "");
+    this.user = new User("", "", "", "", "", "", "ROLE_USER", "", "");
   }
 
   ngOnInit(){
@@ -63,31 +63,31 @@ export class LoginComponent implements OnInit{
 
   getToken(){
       this._userService.signup(this.user, 'true').subscribe(
-      res => {
-        this.token = res.token;
-        console.log(this.token);
+        res => {
+          this.token = res.token;
+          console.log(this.token);
 
-        if(this.token.length <= 0){
+          if(this.token.length <= 0){
+              this.status = 'error';
+          }else{
+              this.status = 'success';
+
+              // PERSISITIR TOKEN DEL USUARIO
+              localStorage.setItem('token', this.token);
+
+              // Conseguir los contadores o estadísticas del usuario
+          }
+
+          this.status = 'success';
+        },
+        err => {
+          let erroMessage = <any>err;
+          console.log(erroMessage);
+
+          if(erroMessage != null){
             this.status = 'error';
-        }else{
-            this.status = 'success';
-
-            // PERSISITIR TOKEN DEL USUARIO
-            localStorage.setItem('token', JSON.stringify(this.token));
-
-            // Conseguir los contadores o estadísticas del usuario
+          }
         }
-
-        this.status = 'success';
-      },
-      err => {
-        let erroMessage = <any>err;
-        console.log(erroMessage);
-
-        if(erroMessage != null){
-          this.status = 'error';
-        }
-      }
-    );
+      );
   }
 }

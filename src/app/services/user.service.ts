@@ -23,7 +23,7 @@ export class UserService{
 
   signup(user: User, gettoken=null): Observable<any>{
     if(gettoken != null){
-      gettoken = gettoken;
+      user.gettoken = gettoken;
     }
 
     let params = JSON.stringify(user);
