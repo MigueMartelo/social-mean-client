@@ -12,6 +12,10 @@
 	background: #cc1717 !important;
 }
 
+.pointer{
+	cursor: pointer;
+}
+
 /*Headers*/
 .navigation{
 	padding: 0px !important;
