@@ -1,0 +1,56 @@
+<div class="col-lg-5">
+	<h1 class="h1-strong">{{title}}</h1>
+
+	<div class="alert alert-success" *ngIf="status == 'success'">
+		Se han actualizado tus datos correctamente
+	</div>
+
+	<div class="alert alert-danger" *ngIf="status == 'error'">
+		No se han actualizado tus datos correctamente
+	</div>
+
+	<form #userEditForm="ngForm" (ngSubmit)="onSubmit()" class="col-lg-12 form-group">
+		<p>
+			<label for="name">Nombre</label>
+			<input type="text" name="name" #name="ngModel" [(ngModel)]="user.name" class="form-control" required>
+			<span *ngIf="!name.value && name.touched" class="alert alert-danger">
+				El nombre es obligatorio
+			</span>
+		</p>
+
+		<p>
+			<label for="surname">Apellido</label>
+			<input type="text" name="surname" #surname="ngModel" [(ngModel)]="user.surname" class="form-control" required>
+			<span *ngIf="!surname.value && surname.touched" class="alert alert-danger">
+				El apellido es obligatorio
+			</span>
+		</p>
+
+		<p>
+			<label for="nick">Nick</label>
+			<input type="text" name="nick" #nick="ngModel" [(ngModel)]="user.nick" class="form-control" required>
+			<span *ngIf="!nick.value && nick.touched" class="alert alert-danger">
+				El nick es obligatorio
+			</span>
+		</p>
+
+		<p>
+			<label for="email">Correo electrónico</label>
+			<input type="email" name="email" #email="ngModel" [(ngModel)]="user.email" class="form-control" required>
+			<span *ngIf="!email.value && email.touched" class="alert alert-danger">
+				El correo electrónico es obligatorio
+			</span>
+		</p>
+
+		<div *ngIf="user.image">
+			<img src="{{url+'get-image-user/'+ user.image}}" class="img-responsive">
+		</div>
+
+		<p>
+			<label>Sube tu avatar</label>
+			<input type="file" placeholder="Subir avatar" (change)="fileChangeEvent($event)">
+		</p>
+
+		<input type="submit" value="{{title}}" class="btn btn-success" [disabled]="!userEditForm.form.valid">
+	</form>
+</div>

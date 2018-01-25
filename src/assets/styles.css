@@ -47,7 +47,19 @@
 	color: black !important; 
 }
 
+.navigation .avatar{
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	overflow: hidden;
+	margin-top: 5px;
+	margin-right: 5px;	
+}
 
+.navigation .avatar img{	
+	height: auto;
+	width: 60px;
+}
 
 .jumbotron{
 	padding: 20px;
