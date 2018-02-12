@@ -3,30 +3,88 @@ import { Router, ActivatedRoute, Params} from '@angular/router';
 import {GLOBAL} from '../../services/global';
 import {UserService} from '../../services/user.service';
 import { Publication } from '../../models/publication';
+import { PublicationService } from '../../services/publication.service';
 
 @Component({
 	selector: 'timeline',
 	templateUrl: './timeline.component.html',
-	providers: [UserService]
+	providers: [UserService, PublicationService]
 })
 export class TimelineComponent implements OnInit{
 	public identity;
 	public token;
 	public title: string;
 	public url: string;
+	public status: string;
+	public page;
+	public total;
+	public pages;
+	public itemsPerPage;
+	public noMore: boolean = false;
+	public publications: Publication[];
 
 	constructor(
 		private _route: ActivatedRoute,
 		private _router: Router,
-		private _userService: UserService
+		private _userService: UserService,
+		private _publicationService: PublicationService
 	){
 		this.title = 'Timeline';
 		this.identity = this._userService.getIdentity();
 		this.token = this._userService.getToken();
 		this.url = GLOBAL.url;
+		this.page = 1;
 	}
 
 	ngOnInit(){
 		console.log('Componente TimeLine cargado');
+		this.getPublications(this.page);
+	}
+
+	getPublications(page, adding = false){
+		this._publicationService.getPublications(this.token, page).subscribe(
+			res => {
+				console.log(res);
+				if(res.publications){
+					
+					this.total = res.total_items;
+					this.pages = res.pages;
+					this.itemsPerPage = res.items_per_page;
+
+					if(!adding){
+						this.publications = res.publications;
+					}else{
+						let arrayA = this.publications;
+						let arrayB = res.publications;
+						this.publications = arrayA.concat(arrayB);
+
+						$('html, body').animate({scrollTop: $('body').prop('scrollHeight')}, 500);
+					}
+
+					if(page > this.page){
+						this._router.navigate(['/home']);
+					}
+				}else{
+					this.status = 'error';
+				}
+			},
+			err => {
+				let errorMessage = <any>err;
+				console.log(errorMessage);
+				if(errorMessage != null){
+					this.status = 'error';
+				}
+			}
+		);
+	}
+
+	viewMore(){
+		if(this.publications.length == this.total){
+			this.noMore = true;
+		}else{
+			this.page += 1;
+		}
+
+		this.getPublications(this.page, true);
 	}
 }
