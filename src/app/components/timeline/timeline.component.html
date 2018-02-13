@@ -1,7 +1,12 @@
 <div class="col-lg-8">
-	<h1 class="h1-strong">{{title}}</h1>
+	<h1 class="h1-strong">
+		{{title}}
+		<button class="btn btn-success btn-sm" (click)="refresh($event)">
+			Mostrar nuevas
+		</button>
+	</h1>
 
-	<div id="publication">
+	<div id="publications">
 		<div *ngFor="let publication of publications" class="item-publication">
 			<div class="panel panel-default">
 				<div class="panel-body">
@@ -11,9 +16,17 @@
 							<img src="/assets/img-default.png" class="avatar-default" *ngIf="!publication.user.image">
 						</a>
 					</div>
-					<div class="user-name">
+					
+					<div>
+						<span class="user-name">
 						{{publication.user.name + ' ' + publication.user.surname}}
+						</span>
+						&nbsp;|&nbsp;
+						<span class="date">
+							{{(publication.created_at | amFromUnix) | amLocale:'es' | amTimeAgo}}
+						</span>
 					</div>
+
 					<h4 class="publication-text pull-left">
 						{{publication.text}}
 					</h4>			
@@ -31,5 +44,6 @@
 	</div>
 </div>
 
-<sidebar></sidebar>
+<sidebar (sended)="refresh($event)"></sidebar>
+
 <div class="clearfix"></div>
