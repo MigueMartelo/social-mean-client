@@ -58,7 +58,7 @@
 
 .navigation .avatar img{	
 	height: auto;
-	width: 60px;
+	width: 100%;
 }
 
 .jumbotron{
@@ -83,7 +83,7 @@
 
 .item-user .image-user img,
 .item-publication .image-user img{
-	width: 120px;
+	width: 100%;
 }
 
 .item-user .user-name,
@@ -197,5 +197,41 @@
 }
 
 #publications .date{
+	color: grey;
+}
+
+/*PROFILE*/
+#data-profile{
+	min-height: 500px;
+	text-align: left;
+}
+
+#data-profile .avatar{
+	width: 185px;
+	height: 185px;
+	border-radius: 400px;
+	overflow: hidden;
+	margin-right: 15px;
+	margin: 0 auto;
+}
+
+#data-profile .avatar img{
+	width: 100%;
+}
+
+#data-profile .user-name{
+	padding-top: 40px;
+	margin-left: 15px;
+}
+
+#data-profile .user-name .name{
+	font-size: 24px;
+	font-weight: bold;
+	color: #555;
+}
+
+#data-profile .user-name .nick{
+	font-size: 24px;
+	font-weight: normal;
 	color: grey;
 }
