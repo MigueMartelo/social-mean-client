@@ -19,7 +19,8 @@ export class ProfileComponent implements OnInit{
 	public identity;
 	public token;
 	public stats;
-	public follow;
+	public followed;
+	public following;
 	public url;
 
 	constructor(
@@ -32,6 +33,8 @@ export class ProfileComponent implements OnInit{
 		this.identity = this._userService.getIdentity();
 		this.token = this._userService.getToken();
 		this.url = GLOBAL.url;
+		this.followed = false;
+		this.following = false;
 	}
 
 	ngOnInit(){
@@ -50,8 +53,22 @@ export class ProfileComponent implements OnInit{
 	getUser(id){
 		this._userService.getUser(id).subscribe(
 			res => {
+				console.log(res);
 				if(res.user){
-					this.user = res.user;					
+					this.user = res.user;	
+
+					if(res.following && res.following._id){
+						this.following = true;
+					}else{
+						this.following = false;
+					}
+
+					if(res.followed && res.followed._id){
+						this.followed = true;
+					}else{
+						this.followed = false;
+					}
+
 				}else{
 					this.status = 'error';
 				}
@@ -72,5 +89,38 @@ export class ProfileComponent implements OnInit{
 				console.log(<any>err);
 			}
 		);
+	}
+
+	followUser(followed){
+		let follow = new Follow('', this.identity._id, followed);
+
+		this._followService.addFollow(this.token, follow).subscribe(
+			res => {
+				this.following = true;
+			},
+			err => {
+				console.log(<any>err);
+			}
+		);
+	}
+
+	unfollowUser(followed){
+		this._followService.deleteFollow(this.token, followed).subscribe(
+			res => {
+				this.following = false;
+			},
+			err => {
+				console.log(<any>err);
+			}
+		);
+	}
+
+	public followUserOver;
+	mouseEnter(user_id){
+		this.followUserOver = user_id;
+	}
+
+	mouseLeave(){
+		this.followUserOver = 0;
 	}
 }

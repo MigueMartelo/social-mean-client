@@ -22,6 +22,7 @@ export class TimelineComponent implements OnInit{
 	public itemsPerPage;
 	public noMore: boolean = false;
 	public publications: Publication[];
+	public showImage;
 
 	constructor(
 		private _route: ActivatedRoute,
@@ -57,7 +58,7 @@ export class TimelineComponent implements OnInit{
 						let arrayB = res.publications;
 						this.publications = arrayA.concat(arrayB);
 
-						$('html, body').animate({scrollTop: $('body').prop('scrollHeight')}, 500);
+						$('html, body').animate({scrollTop: $('html').prop('scrollHeight')}, 500);
 					}
 
 					if(page > this.page){
@@ -78,16 +79,35 @@ export class TimelineComponent implements OnInit{
 	}
 
 	viewMore(){
-		if(this.publications.length == this.total){
+		this.page += 1;
+
+		if(this.page == this.pages){
 			this.noMore = true;
-		}else{
-			this.page += 1;
 		}
 
 		this.getPublications(this.page, true);
 	}
 
-	refresh(event){
+	refresh(event = null){
 		this.getPublications(1);
+	}
+
+	showThisImage(id){
+		this.showImage = id;
+	}
+
+	hideThisImage(id){
+		this.showImage = 0;
+	}
+
+	deletePublication(id){
+		this._publicationService.deletePublication(this.token, id).subscribe(
+			res => {
+				this.refresh();
+			},
+			err => {
+				console.log(<any>err);
+			}
+		);
 	}
 }

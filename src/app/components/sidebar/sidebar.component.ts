@@ -4,12 +4,13 @@ import {UserService} from '../../services/user.service';
 import {GLOBAL} from '../../services/global';
 import { Publication } from '../../models/publication';
 import { PublicationService } from '../../services/publication.service';
+import {UploadService} from '../../services/upload.service';
 
 
 @Component({
 	selector: 'sidebar',
 	templateUrl: './sidebar.component.html',
-	providers: [UserService, PublicationService]
+	providers: [UserService, PublicationService, UploadService]
 })
 export class SidebarComponent implements OnInit{
 	public identity;
@@ -24,6 +25,7 @@ export class SidebarComponent implements OnInit{
 		private _publicationService: PublicationService,
 		private _route: ActivatedRoute,
     	private _router: Router,
+    	private _uploadService: UploadService
 	){
 		this.identity = this._userService.getIdentity();
 		this.token = this._userService.getToken();
@@ -36,14 +38,29 @@ export class SidebarComponent implements OnInit{
 		console.log('El componente sidebar ha sido cargado')
 	}
 
-	onSubmit(form){
+	onSubmit(form, event){
 		this._publicationService.addPublication(this.token, this.publication).subscribe(
 			res => {
 				if(res){
-					//this.publication = res.publication;
-					this.status = 'success';
-					form.reset();
-					this._router.navigate(['/timeline']);
+					console.log(res);
+
+					if(this.filesToUpload && this.filesToUpload.length){
+						// Upload image
+						this._uploadService.makeFileRequest(this.url+'upload-image-pub/'+res.publicationStored._id, [], this.filesToUpload, this.token, 'image')
+						.then((result:any) => {
+							this.publication.file = result.image;
+							this.status = 'success';
+							form.reset();
+							this._router.navigate(['/timeline']);
+							this.sended.emit({send:'true'});
+						});
+					}else{
+						this.status = 'success';
+						form.reset();
+						this._router.navigate(['/timeline']);
+						this.sended.emit({send:'true'});
+					}
+					
 				}else{
 					this.status = 'error';
 				}
@@ -56,6 +73,11 @@ export class SidebarComponent implements OnInit{
 				}
 			}
 		);
+	}
+
+	public filesToUpload:Array<File>;
+	fileChangeEvent(fileInput: any){
+		this.filesToUpload = <Array<File>>fileInput.target.files;
 	}
 
 	// Ouput
