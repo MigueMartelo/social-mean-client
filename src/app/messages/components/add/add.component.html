@@ -1,0 +1,28 @@
+<div class="col-lg-10">
+	<h3>{{title}}</h3>
+
+	<div class="alert alert-success alert-dismissable" *ngIf="status == 'success'">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		Mensaje enviado correctamente!
+	</div>
+	<div class="alert alert-danger alert-dismissable" *ngIf="status == 'error'">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		El mensaje no ha podido ser enviado!
+	</div>
+	
+	<form #formAdd="ngForm" (ngSubmit)="onSubmit(formAdd)" class="form-group">
+		<p>
+			<label>Para:</label>
+			<!--listado de seguidores-->
+			<select name="receiver" #receiver="ngModel" [(ngModel)]="message.receiver" class="form-control" *ngIf="follows" required="">
+				<option *ngFor="let follow of follows" value="{{follow.user._id}}">{{follow.user.name+' '+follow.user.surname+' - ('+follow.user.nick+')'}}</option>
+			</select>
+		</p>
+		<p>
+			<label>Mensaje:</label>
+			<textarea name="text" #text="ngModel" [(ngModel)]="message.text" class="form-control" required=""></textarea>
+			<span *ngIf="!text.valid && text.touched">El mensaje es obligatorio</span>
+		</p>
+		<input type="submit" value="{{title}}" class="btn btn-success">
+	</form>
+</div>
